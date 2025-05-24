@@ -1,0 +1,40 @@
+name: Deploy to Neocities
+
+# Only run on pushes to your main branch
+on:
+  push:
+    branches:
+      - main
+
+# Prevent overlapping runs
+concurrency:
+  group: deploy-to-neocities
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Check out your code
+      - uses: actions/checkout@v4
+
+      # 2. (Optional) Install Node.js and build your site
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies & build
+        run: |
+          npm install
+          npm run build
+
+      # 3. Deploy your `public/` directory to Neocities
+      - name: Deploy to Neocities
+        uses: bcomnes/deploy-to-neocities@v3
+        with:
+          api_key: ${{ secrets.NEOCITIES_API_TOKEN }}
+          dist_dir: public
+          cleanup: false
+          neocities_supporter: false
+          preview_before_deploy: true
