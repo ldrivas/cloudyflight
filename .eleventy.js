@@ -1,11 +1,14 @@
 module.exports = function (eleventyConfig) {
-  // Copy everything that isn't processed by Eleventy (e.g. images, CSS, JS)
-  eleventyConfig.addPassthroughCopy({ "src": "." });
+  // Copy everything from src/img to public/img
+  eleventyConfig.addPassthroughCopy("src/img");
+
+  // Optional: Copy other static folders too
+  eleventyConfig.addPassthroughCopy("src/workflows");
 
   return {
     dir: {
-      input: "src",     // Where your source files live
-      output: "public", // Where Eleventy puts the built site
+      input: "src",
+      output: "public", // 👈 This is the key change
     },
   };
 };
